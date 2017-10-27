@@ -1,0 +1,28 @@
+!!! 5
+%html
+  %head
+    %title= 'Tfl Status'
+    %link{ rel: 'stylesheet', href: '/style.css' }
+    %meta{ 'http-equiv': 'refresh', content: '300' }
+
+  %body
+    %header
+      .logo
+        %img{ src: '/logo.png', width: '250' }
+
+    %main
+      %table
+        - @line_statuses.each do |line|
+          %tr{ class: "line line-#{line[:id]}" }
+            %th= line[:name]
+
+            - line[:statuses].each do |status|
+              %td
+                %strong
+                  = status[:severity]
+                = status[:reason] unless status[:reason].empty?
+
+    %footer
+      %p.updated
+        Last updated:
+        = Time.now.strftime('%H:%M')
