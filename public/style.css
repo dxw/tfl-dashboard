@@ -58,6 +58,14 @@ td strong {
   display: block;
 }
 
+.reason {
+  max-height: 30px;
+  max-width: 1000px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 footer {
   font-size: 16px;
   margin-left: 36px;

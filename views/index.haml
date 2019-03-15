@@ -20,7 +20,8 @@
               %td
                 %strong
                   = status[:severity]
-                = status[:reason] unless status[:reason].empty?
+                .reason
+                  = status[:reason] unless status[:reason].empty?
 
     %footer
       %p.updated
