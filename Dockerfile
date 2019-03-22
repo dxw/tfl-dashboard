@@ -1,4 +1,4 @@
-FROM ruby:2.3.3
+FROM ruby:2.5.1
 MAINTAINER Tom Hipkin <tomh@dxw.com>
 
 RUN apt-get update -qq
