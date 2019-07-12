@@ -6,3 +6,7 @@ get '/' do
 
   haml :index, format: :html5
 end
+
+get '/check' do
+  'Im alive!'
+end
