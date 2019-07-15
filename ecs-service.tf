@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "app_service_logs" {
-  name              = "${terraform.workspace}-app"
+  name              = "${terraform.workspace}-${local.app_name}"
   retention_in_days = 90
 }
 
@@ -7,8 +7,8 @@ data "template_file" "app_container_definition" {
   template = "${file("./container_definitions/app.json.tpl")}"
 
   vars {
-    image          = "${var.account_id}.dkr.ecr.${var.region}.amazonaws.com/${terraform.workspace}-app"
-    container_name = "${terraform.workspace}-app"
+    image          = "${var.account_id}.dkr.ecr.${var.region}.amazonaws.com/${terraform.workspace}-${local.app_name}"
+    container_name = "${terraform.workspace}-${local.app_name}"
     container_port = "5000"
     log_group      = "${aws_cloudwatch_log_group.app_service_logs.name}"
     log_region     = "${var.region}"
@@ -17,18 +17,18 @@ data "template_file" "app_container_definition" {
 }
 
 resource "aws_iam_role" "app_ecs_execution_role" {
-  name               = "app_${terraform.workspace}_ecs_task_execution_role"
+  name               = "${local.app_name}_${terraform.workspace}_ecs_task_execution_role"
   assume_role_policy = "${file("./policies/ecs_task_execution_role.json.tpl")}"
 }
 
 resource "aws_iam_role_policy" "app_ecs_execution_role_policy" {
-  name   = "app_${terraform.workspace}_ecs_execution_role_policy"
+  name   = "${local.app_name}_${terraform.workspace}_ecs_execution_role_policy"
   policy = "${file("./policies/app_ecs_task_execution_role_policy.json.tpl")}"
   role   = "${aws_iam_role.app_ecs_execution_role.id}"
 }
 
 resource "aws_iam_role" "app_task_role" {
-  name               = "app_${terraform.workspace}_task_role"
+  name               = "${local.app_name}_${terraform.workspace}_task_role"
   assume_role_policy = "${file("./policies/app_task_role.json.tpl")}"
 }
 
@@ -42,7 +42,7 @@ data "template_file" "app_task_role" {
 }
 
 resource "aws_iam_role_policy" "app_task_role_policy" {
-  name   = "app_${terraform.workspace}_task_role_policy"
+  name   = "${local.app_name}_${terraform.workspace}_task_role_policy"
   policy = "${data.template_file.app_task_role.rendered}"
   role   = "${aws_iam_role.app_task_role.id}"
 }
@@ -52,7 +52,7 @@ module "app-service" {
 
   environment = "dxw"
 
-  service_name          = "app-${var.environment}"
+  service_name          = "${local.app_name}-${var.environment}"
   service_desired_count = 2
 
   vpc_id   = "${data.aws_vpc.dashboards_vpc.id}"
@@ -83,7 +83,7 @@ module "app-service" {
 
   lb_target_group = {
     target_type    = "instance"
-    container_name = "${terraform.workspace}-app"
+    container_name = "${terraform.workspace}-${local.app_name}"
     container_port = "5000"
   }
 

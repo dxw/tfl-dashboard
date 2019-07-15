@@ -1,13 +1,13 @@
 ## ECR repository
 resource "aws_ecr_repository" "app" {
-  name = "${terraform.workspace}-app"
+  name = "${terraform.workspace}-${local.app_name}"
 }
 
 ## CodePipeline
 
 ### Source Bucket
 resource "aws_s3_bucket" "app_source" {
-  bucket        = "app-${terraform.workspace}-source"
+  bucket        = "${local.app_name}-${terraform.workspace}-source"
   acl           = "private"
   force_destroy = true
 }
@@ -22,12 +22,12 @@ data "template_file" "app_codepipeline_policy" {
 }
 
 resource "aws_iam_role" "app_codepipeline_role" {
-  name               = "app-${terraform.workspace}-codepipeline-role"
+  name               = "${local.app_name}-${terraform.workspace}-codepipeline-role"
   assume_role_policy = "${file("./policies/codepipeline_role.json.tpl")}"
 }
 
 resource "aws_iam_role_policy" "app_codepipeline_policy" {
-  name   = "app-${terraform.workspace}-codepipeline-policy"
+  name   = "${local.app_name}-${terraform.workspace}-codepipeline-policy"
   role   = "${aws_iam_role.app_codepipeline_role.id}"
   policy = "${data.template_file.app_codepipeline_policy.rendered}"
 }
@@ -42,19 +42,19 @@ data "template_file" "app_codebuild_policy" {
 }
 
 resource "aws_iam_role" "app_codebuild_role" {
-  name               = "app-${terraform.workspace}-codebuild-role"
+  name               = "${local.app_name}-${terraform.workspace}-codebuild-role"
   assume_role_policy = "${file("./policies/codebuild_role.json.tpl")}"
 }
 
 resource "aws_iam_role_policy" "app_codebuild_policy" {
-  name   = "app-${terraform.workspace}-codebuild-policy"
+  name   = "${local.app_name}-${terraform.workspace}-codebuild-policy"
   role   = "${aws_iam_role.app_codebuild_role.id}"
   policy = "${data.template_file.app_codebuild_policy.rendered}"
 }
 
 ### CodeBuild Project
 resource "aws_codebuild_project" "app_build" {
-  name          = "app-${terraform.workspace}-codebuild"
+  name          = "${local.app_name}-${terraform.workspace}-codebuild"
   build_timeout = "10"
   service_role  = "${aws_iam_role.app_codebuild_role.arn}"
 
@@ -79,7 +79,15 @@ resource "aws_codebuild_project" "app_build" {
       },
       {
         "name"  = "IMAGE_REPO_NAME"
-        "value" = "${terraform.workspace}-app"
+        "value" = "${terraform.workspace}-${local.app_name}"
+      },
+      {
+        "name"  = "APP_NAME"
+        "value" = "${local.app_name}"
+      },
+      {
+        "name"  = "TERRAFORM_WORKSPACE"
+        "value" = "${terraform.workspace}"
       },
     ]
   }
@@ -92,7 +100,7 @@ resource "aws_codebuild_project" "app_build" {
 
 ### CodePipeline
 resource "aws_codepipeline" "app_pipeline" {
-  name     = "app-${terraform.workspace}-pipeline"
+  name     = "${local.app_name}-${terraform.workspace}-pipeline"
   role_arn = "${aws_iam_role.app_codepipeline_role.arn}"
 
   artifact_store {
@@ -133,7 +141,7 @@ resource "aws_codepipeline" "app_pipeline" {
       output_artifacts = ["imagedefinitions"]
 
       configuration {
-        ProjectName = "app-${terraform.workspace}-codebuild"
+        ProjectName = "${local.app_name}-${terraform.workspace}-codebuild"
       }
     }
   }

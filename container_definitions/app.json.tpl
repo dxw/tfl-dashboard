@@ -18,7 +18,7 @@
     "environment": [
       {
         "name": "SSM_PATH_SUFFIX",
-        "value": "app"
+        "value": "${container_name}"
       }
     ]
   }
