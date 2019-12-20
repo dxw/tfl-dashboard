@@ -6,24 +6,17 @@
     %meta{ 'http-equiv': 'refresh', content: '300' }
 
   %body
-    %header
-      .logo
-        %img{ src: '/logo.png', width: '250' }
+    .grid
+      -@line_statuses.each do |line|
+        .line{ class: "line line-#{line[:id]}" }
+          %strong=line[:name]
+          - line[:statuses].each do |status|
+            %span{class: status[:severity] == 'Good Service' ? 'severity' : 'severity severity-warning' }
+              = status[:severity]
+            .reason
+              = status[:reason] unless status[:reason].empty?
 
-    %main
-      %table
-        - @line_statuses.each do |line|
-          %tr{ class: "line line-#{line[:id]}" }
-            %th= line[:name]
-
-            - line[:statuses].each do |status|
-              %td
-                %strong
-                  = status[:severity]
-                .reason
-                  = status[:reason] unless status[:reason].empty?
-
-    %footer
-      %p.updated
-        Last updated:
-        = Time.now.strftime('%H:%M')
+      %footer
+        .updated
+          Last updated:
+          =Time.now.strftime('%H:%M')
