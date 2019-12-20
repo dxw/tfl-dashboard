@@ -1,17 +1,18 @@
 html {
   margin: 0;
   padding: 0;
-  width: 1920px;
-  height: 1080px;
+  height: 100vh;
+  width: 100vw;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #000;
-  color: #fff;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 30px;
+  background-color: #f5f5f5;
+  color: #333;
+  font-family: 'Helvetica Neue', helvetica, arial, sans-serif;
+  font-size: 2.5vh;
+  line-height: 1.5;
 }
 
 header {
@@ -23,102 +24,87 @@ header {
 main {
 }
 
-table {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  width: 100%;
-  border-collapse: collapse;
+footer {
+  padding: 0.5em 1em;
+  border-left: 2em solid #f5f5f5;
+  color: #827e7e;
 }
 
-tr {
-  margin: 0;
-  padding: 0.25em;
+.updated {
+  font-size: 0.7em;
 }
 
-td, th {
-  padding: 0.5em 0.25em;
+.line {
+  padding: 0.5em 1em;
+  margin: 0.1em 0;
 }
 
-th {
-  text-align: right;
-  width: 50%;
-  padding-right: 0.5em;
+.severity {
+  color: #827e7e;
 }
 
-td {
-  text-align: left;
-  width: 50%;
-  padding-left: 0.5em;
-  font-size: 18px;
+.severity-warning {
+  color: #e32017;
+  font-weight: bold;
 }
 
-td strong {
-  font-size: 30px;
-  display: block;
+.severity-warning::before {
+  content: "☹";
 }
 
 .reason {
-  max-height: 30px;
-  max-width: 1000px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-footer {
-  font-size: 16px;
-  margin-left: 36px;
+  font-size: 0.85em;
 }
 
 .line-bakerloo {
-  background-color: #b36305;
+  border-left: 2em solid #b36305;
 }
 
 .line-central {
-  background-color: #e32017;
+  border-left: 2em solid #e32017;
 }
 
 .line-circle {
-  background-color: #ffd300;
-  color: #000;
+  border-left: 2em solid #ffd300;
 }
 
 .line-district {
-  background-color: #00782a;
+  border-left: 2em solid #00782a;
 }
 
 .line-hammersmith-city {
-  background-color: #f3a9bb;
-  color: #000;
+  border-left: 2em solid #f3a9bb;
 }
 
 .line-jubilee {
-  background-color: #a0a5a9;
-  color: #000;
+  border-left: 2em solid #a0a5a9;
 }
 
 .line-metropolitan {
-  background-color: #9b0056;
+  border-left: 2em solid #9b0056;
 }
 
 .line-northern {
-  background-color: #000000;
+  border-left: 2em solid #000000;
 }
 
 .line-piccadilly {
-  background-color: #003688;
+  border-left: 2em solid #003688;
 }
 
 .line-victoria {
-  background-color: #0098d4;
+  border-left: 2em solid #0098d4;
 }
 
 .line-waterloo-city {
-  background-color: #95cdba;
-  color: #000;
+  border-left: 2em solid #95cdba;
 }
 
 .line-london-overground {
-  background-color: #ee7c0e;
+  border-left: 2em solid #ee7c0e;
+}
+
+.grid {
+  display: grid;
+  grid-template-rows: 1fr;
 }
