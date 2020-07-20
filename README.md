@@ -13,8 +13,8 @@ By default it will run on http://localhost:9292/.
 First make sure you are logged into Docker Hub with `docker login`. Then build and push the image:
 
 ```
-docker build . -t thedxw/tfl-dashboard
-docker push thedxw/tfl-dashboard
+docker build . -t <image_name>
+docker push <image_name>
 ```
 
 ### Generic deployment instructions
@@ -22,10 +22,10 @@ docker push thedxw/tfl-dashboard
 Once logged in and in the right folder, you need to stop the container, remove the container and the image, then download and build the latest image:
 
 ```
-$ docker-compose stop tfl
-$ docker-compose rm tfl
-$ docker rmi thedxw/tfl-dashboard
-$ docker-compose up -d tfl
+$ docker-compose stop <service_name>
+$ docker-compose rm <service_name>
+$ docker rmi <image_name>
+$ docker-compose up -d <service_name>
 ```
 
 ### dxw specific deployment instructions
